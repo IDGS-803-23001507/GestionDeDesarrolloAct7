@@ -5,7 +5,7 @@ def calcValInv(cant, prec):
     if prec < 0:
         raise ValueError("El precio no puede ser negativo")
 
-    return cant + prec
+    return cant * prec
 
 
 def verifExis(stock, cantSol):
