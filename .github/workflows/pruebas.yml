@@ -1,4 +1,3 @@
-
 name: Pruebas automatizadas
 
 on:
@@ -8,8 +7,33 @@ on:
     branches: [main]
 
 jobs:
-  pruebas:
+
+  pruebas-desarrollo:
+    name: Pruebas de desarrollo
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Ejecutar pruebas de desarrollo
+        run: python -m pytest -v test_invetarios.py
+
+
+  pruebas-integracion:
+    name: Pruebas de integración
+    runs-on: ubuntu-latest
+    needs: pruebas-desarrollo
 
     steps:
       - name: Descargar repositorio
@@ -24,5 +48,27 @@ jobs:
         run: |
           python -m pip install -r requirements.txt
 
-      - name: Ejecutar pruebas
-        run: python -m pytest -v
+      - name: Ejecutar pruebas de integración
+        run: python -m pytest -v test_integration.py
+
+
+  pruebas-sistema:
+    name: Pruebas de sistema
+    runs-on: ubuntu-latest
+    needs: pruebas-integracion
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install -r requirements.txt
+
+      - name: Ejecutar pruebas de sistema
+        run: python -m pytest -v test_system.py
