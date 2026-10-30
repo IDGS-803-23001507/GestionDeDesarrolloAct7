@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Ejecutar pruebas de desarrollo
-        run: python -m pytest -v test_invetario.py
+        run: python -m pytest -v test_inventario.py
 
 
   pruebas-integracion:
